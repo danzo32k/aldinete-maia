@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+  <title>Álbum Interativo • Aldinete</title>
+  <meta name="description" content="Álbum de namoro interativo para Aldinete: fotos, declarações, surpresas, mini-jogos e muito amor." />
+  
+  <!-- Meta tags melhoradas para compartilhamento -->
+  <meta property="og:title" content="Álbum Interativo • Aldinete" />
+  <meta property="og:description" content="Um álbum digital romântico com fotos, declarações, jogos e muito amor." />
+  <meta property="og:image" content="./assets/images/13411c34-2122-4b94-8200-3654f366e0c3.jpg" />
+  <meta property="og:url" content="" />
+  <meta property="og:type" content="website" />
+  
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Álbum Interativo • Aldinete" />
+  <meta name="twitter:description" content="Um álbum digital romântico com fotos, declarações, jogos e muito amor." />
+  <meta name="twitter:image" content="./assets/images/13411c34-2122-4b94-8200-3654f366e0c3.jpg" />
+  
+  <!-- PWA Manifest -->
+  <link rel="manifest" href="./manifest.json" />
+  <meta name="theme-color" content="#ff6fa5" />
+  
+  <!-- Ícones PWA -->
+  <link rel="apple-touch-icon" href="./assets/icons/icon-192x192.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="./assets/icons/icon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="./assets/icons/icon-16x16.png" />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=Alex+Brush&display=swap" rel="stylesheet">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="./css/style.css?v=20250910-01" />
+  <script>
+    // Remove o hash imediatamente ao carregar, antes do render, para evitar ancoragem automática
+    (function(){
+      try { if ('scrollRestoration' in history) history.scrollRestoration = 'manual'; } catch(e) {}
+      if (location.hash) {
+        try { history.replaceState(null, '', location.pathname); } catch(e) { location.hash = ''; }
+      }
+      // Garante posição no topo em refresh e quando voltar do cache do navegador
+      window.addEventListener('DOMContentLoaded', function(){ window.scrollTo(0,0); });
+      window.addEventListener('pageshow', function(e){ if (e.persisted) window.scrollTo(0,0); });
+    })();
+  </script>
+</head>
+<body class="pin-lock">
+  <!-- Floating Particles Canvas -->
+  <canvas id="particles"></canvas>
+
+  <header class="hero" id="capa">
+    <div class="hero-inner">
+      <h1 class="hero-title">Aldinete Maia</h1>
+      <p class="hero-sub">Nosso amor desde <span id="startDateLabel">26/03/23</span></p>
+      <p class="hero-quote" id="heroQuote"></p>
+      <div class="hero-photo-wrapper">
+        <img src="./assets/images/13411c34-2122-4b94-8200-3654f366e0c3.jpg" alt="Foto do casal" class="hero-photo" />
+      </div>
+      <div class="scroll-indicator">▼ Role para explorar ▼</div>
+    </div>
+  </header>
+
+  <main>
+    
+
+    <!-- Declarações de Amor -->
+    <section class="section declarations" id="declaracoes">
+      <h2 class="title cursive">Declarações de Amor</h2>
+      <div class="typewriter" id="typewriter"></div>
+      <div class="controls">
+        <button class="btn" id="btnPrevMsg">Anterior</button>
+        <button class="btn" id="btnNextMsg">Próxima</button>
+        <button class="btn" id="btnShuffleMsg">Aleatória</button>
+      </div>
+    </section>
+
+    
+
+    <!-- Galeria -->
+    <section class="section gallery" id="galeria">
+      <h2 class="title cursive">Nossa Galeria</h2>
+      <div class="thumbs" id="thumbs">
+        <div class="thumb"><img src="./assets/images/13411c34-2122-4b94-8200-3654f366e0c3.jpg" alt="Meu Melhor Sorriso" data-index="0"></div>
+        <div class="thumb"><img src="./assets/images/21f2a252-f26b-4937-bace-9b5b20dd319f.jpg" alt="O Abraço Que Cura" data-index="1"></div>
+        <div class="thumb"><img src="./assets/images/222d8dc2-8a22-409b-8167-97401051151c.jpg" alt="Risos que Ecoam" data-index="2"></div>
+        <div class="thumb"><img src="./assets/images/3da39d90-7432-4d9d-968d-92b8db1123f9.jpg" alt="Olhares Eternos" data-index="3"></div>
+        <div class="thumb"><img src="./assets/images/4500fc69-663c-430c-861f-a2f5ca461c2d.jpg" alt="Aventura de Amar" data-index="4"></div>
+        <div class="thumb"><img src="./assets/images/4d7a16c5-df7a-4284-b6b0-82e05623ea12.jpg" alt="Meu Paraíso" data-index="5"></div>
+      </div>
+    </section>
+
+    <!-- Modal da Galeria -->
+    <div id="modal" class="modal hidden" aria-hidden="true" role="dialog" aria-label="Visualizador de fotos">
+      <div class="modal-content">
+        <button class="modal-close" id="modalClose" aria-label="Fechar">×</button>
+        <button class="modal-nav left" id="modalPrev" aria-label="Anterior">❮</button>
+        <img id="modalImg" alt="Foto ampliada" />
+        <div class="modal-caption" id="modalCaption"></div>
+        <button class="modal-nav right" id="modalNext" aria-label="Próxima">❯</button>
+      </div>
+      <div class="modal-backdrop" id="modalBackdrop"></div>
+    </div>
+
+    <!-- Surpresas -->
+    <section class="section surprises" id="surpresas">
+      <h2 class="title cursive">Surpresas Especiais</h2>
+      <div style="display: flex; justify-content: center; margin: 1.5rem 0;">
+        <button class="btn" id="btnSurpresa" style="font-size: 1.1rem; padding: 0.8rem 2rem;">� Mensagem Surpresa</button>
+      </div>
+      <div id="surpriseOutput" class="surprise-output" style="text-align: center; margin-top: 1rem;"></div>
+    </section>
+
+   <section class="section music" id="musica">
+  <h2 class="title cursive">Nossa Música</h2>
+  <div style="max-width: 800px; margin: 0 auto; padding: 0 20px;">
+    
+    <a href="https://www.youtube.com/watch?v=dHYOVuq_Fco" 
+       target="_blank" 
+       style="display: block; position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; margin: 2rem 0;">
+      
+      <img src="https://img.youtube.com/vi/dHYOVuq_Fco/maxresdefault.jpg" 
+           alt="Clique para assistir Miúcha, Antonio Carlos Jobim - Pela Luz dos Olhos Teus" 
+           style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.2);">
+      
+      <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); 
+                  width: 90px; height: 60px; background: rgba(0,0,0,0.6); 
+                  border-radius: 12px; display: flex; justify-content: center; align-items: center; 
+                  border: 0 solid transparent; transition: all 0.3s ease;">
+        <div style="width: 0; height: 0; border-style: solid; 
+                    border-width: 15px 0 15px 25px; border-color: transparent transparent transparent #ffffff; 
+                    margin-left: 5px;"></div>
+      </div>
+      
+    </a>
+    
+  </div>
+</section>
+
+    <!-- Nossa História -->
+    <section class="section timeline" id="historia">
+      <h2 class="title cursive">Nossa História</h2>
+      <ul class="timeline-list" id="timeline">
+        <li class="timeline-item">
+          <button class="timeline-header">Meu abraço favorito</button>
+          <div class="timeline-body">
+            <img src="./assets/images/78f5a4cf-0173-49e1-be4f-452754986ba9.jpg" alt="Nosso abraço favorito" />
+            <p>O dia em que descobri que seu abraço é meu lugar favorito no mundo inteiro. Onde quer que estejamos, desde que estejamos juntos, é onde eu quero estar.</p>
+          </div>
+        </li>
+        <li class="timeline-item">
+          <button class="timeline-header">Nosso sorriso perfeito</button>
+          <div class="timeline-body">
+            <img src="./assets/images/5bad6d98-9da5-47a1-9085-3a19e43c4977.jpg" alt="Nosso sorriso juntos" />
+            <p>Quando nossos sorrisos se encontram e o mundo ao redor simplesmente some. Não há lugar mais seguro do que estar ao seu lado, sorrindo juntos.</p>
+          </div>
+        </li>
+        <li class="timeline-item">
+          <button class="timeline-header">Inefável</button>
+          <div class="timeline-body">
+            <img src="./assets/images/8de6c472-07db-4b0c-af9a-696e7f32e200.jpg" alt="Nossa conexão" />
+            <p>Algumas coisas não precisam de palavras. Nosso amor é assim: inefável, intenso e único. Em cada olhar, uma história que só nós dois entendemos.</p>
+          </div>
+        </li>
+      </ul>
+    </section>
+
+    <!-- Planos Futuros -->
+    <section class="section future" id="planos">
+      <h2 class="title cursive">Planos Futuros</h2>
+      <ul class="plans">
+        <li class="plan-item">
+          <span class="rocket">🚀</span>
+          <span>Explorar novos lugares e colecionar memórias.</span>
+        </li>
+        <li class="plan-item">
+          <span class="rocket">🌟</span>
+          <span>Construir sonhos e celebrar cada conquista.</span>
+        </li>
+        <li class="plan-item">
+          <span class="rocket">❤️</span>
+          <span>Cuidar um do outro todos os dias.</span>
+        </li>
+      </ul>
+    </section>
+
+<!-- Cartas do Coração (movido para perto do jogo) -->
+    <section class="section love-letters" id="cartas" style="text-align: center;">
+      <h2 class="title cursive">Cartas do Coração</h2>
+      <p style="margin: 0.5rem 0 1.5rem; font-size: 1.1rem; color: #ffd1e2; font-weight: 500;">Encontre o coração certo para revelar uma mensagem secreta</p>
+      <div class="love-cards" id="loveCards">
+        <div class="love-card" tabindex="0">
+          <div class="love-card-inner">
+            <div class="love-card-front">Quando penso em você...</div>
+            <div class="love-card-back">...o mundo desacelera e meu coração sorri mais alto. ❤</div>
+          </div>
+        </div>
+        <div class="love-card" tabindex="0">
+          <div class="love-card-inner">
+            <div class="love-card-front">Nosso futuro</div>
+            <div class="love-card-back">É o lugar onde quero morar. Um dia de cada vez, ao seu lado.</div>
+          </div>
+        </div>
+        <div class="love-card" tabindex="0">
+          <div class="love-card-inner">
+            <div class="love-card-front">Promessa</div>
+            <div class="love-card-back">Cuidar do seu sorriso como meu tesouro favorito, sempre.</div>
+          </div>
+        </div>
+        <div class="love-card" tabindex="0">
+          <div class="love-card-inner">
+            <div class="love-card-front">Nossa paz</div>
+            <div class="love-card-back">É caber no abraço um do outro, e saber: estamos em casa.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Nosso Quiz (movido para perto do jogo) -->
+    <section class="section quiz" id="quiz-casal">
+      <h2 class="title cursive">Nosso Quiz</h2>
+      <div class="quiz-card" id="quizCard">
+        <div class="quiz-question" id="quizQuestion"></div>
+        <div class="quiz-options" id="quizOptions"></div>
+        <div class="quiz-actions">
+          <button class="btn" id="quizNext">Próxima</button>
+        </div>
+        <div class="quiz-progress" id="quizProgress"></div>
+      </div>
+    </section>
+
+    <!-- Mini-jogo -->
+    <section class="section mini-game" id="jogo">
+      <h2 class="title cursive">Mini-jogo do Amor</h2>
+      <p style="text-align: center; margin: 0.5rem 0 1.5rem; font-size: 1.1rem; color: #fff; width: 100%;">Encontre o coração certo para revelar uma mensagem secreta.</p>
+      <div class="game-board" id="gameBoard"></div>
+      <div class="game-output" id="gameOutput"></div>
+    </section>
+
+    <!-- Seção Secreta -->
+    <section class="section secret hidden" id="secreta">
+      <h2 class="title cursive">Segredo Especial</h2>
+      <p id="secretText">Aldinete, se o universo é infinito, meu amor por você encontrou um jeito de ir além. Em cada silêncio eu te escuto, em cada amanhecer eu te escolho, e em cada batida do meu coração existe um sussurro: "fica comigo para sempre". Você é a minha casa, meu destino e o sonho que eu acordo vivendo. Eu te amo hoje, amanhã e em todos os futuros. ❤</p>
+    </section>
+
+    <!-- Nosso Álbum -->
+    <section class="section love-book" id="livro">
+      <h2 class="title cursive">Nosso Álbum</h2>
+      <div class="book-card">
+        <div class="book-emoji" aria-hidden="true">�</div>
+        <div class="book-header">
+          <div class="book-title">Nosso Álbum</div>
+          <div class="book-sub">Você é o amor da minha vida, meu tesouro eterno</div>
+        </div>
+        <button class="btn" id="openBook">Abrir Álbum</button>
+      </div>
+    </section>
+
+    <!-- Overlay / Modal da História -->
+    <div id="bookOverlay" class="book-overlay hidden" aria-hidden="true" role="dialog" aria-label="Nosso Álbum">
+      <div class="book-modal">
+        <button class="book-close" id="bookClose" aria-label="Fechar">×</button>
+        <div class="book-container">
+          <div class="book-page" id="bookPage"></div>
+        </div>
+        <div class="book-actions">
+          <button class="btn" id="bookPrev">Anterior</button>
+          <div class="book-progress" id="bookProgress"></div>
+          <button class="btn" id="bookNext">Próxima</button>
+        </div>
+      </div>
+      <div class="modal-backdrop" id="bookBackdrop"></div>
+    </div>
+
+  </main>
+
+    <!-- Contador Regressivo para Aniversário -->
+    <section class="section countdown" id="aniversario">
+      <h2 class="title cursive">Contagem para o Aniversário</h2>
+      <div class="countdown-timer" id="countdownTimer">Carregando...</div>
+      <p>Contagem para seu próximo aniversário! 🎂</p>
+    </section>
+
+
+    <!-- Cuidar de Quem Ama -->
+    <section class="section smile-gallery" id="cuidado">
+      <h2 class="title cursive">Cuidar de Quem Ama</h2>
+      <p style="text-align: center; margin: 0.5rem 0 2rem; font-size: 1.1rem; color: #ffd1e2; max-width: 800px; margin-left: auto; margin-right: auto; line-height: 1.6;">
+        Você tem um dom especial de cuidar com carinho de quem ama. Seja com um abraço apertado, 
+        uma palavra de conforto ou um gesto de carinho, você sempre sabe como fazer as pessoas 
+        ao seu redor se sentirem amadas e acolhidas. Essa é uma das muitas qualidades que fazem de você alguém tão especial. ❤️
+      </p>
+      
+      <div class="smile-grid">
+        <div class="smile-item">
+          <img src="./assets/images/2079d72b-04bb-447d-81e5-f2be2321fa49dentinhos.jpg" alt="Seu sorriso iluminado" loading="lazy" />
+          <div class="smile-caption">Seu sorriso iluminado que derrete meu coração</div>
+        </div>
+        
+        <div class="smile-item">
+          <img src="./assets/images/54aecbac-06da-4b1e-8e6d-6ece1aadd27dentinhos.jpg" alt="Seus dentes perfeitos" loading="lazy" />
+          <div class="smile-caption">Dentes perfeitos que completam seu sorriso encantador</div>
+        </div>
+        
+        <div class="smile-item">
+          <img src="./assets/images/aab83159-08f7-45aa-aaa8-5c217b5c3b8cdentinho.jpg" alt="Sorriso radiante" loading="lazy" />
+          <div class="smile-caption">Um sorriso que ilumina até os dias mais cinzentos</div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Toggle Tema -->
+  <button class="theme-toggle" id="themeToggle">🌙 Tema</button>
+
+
+  <!-- PWA Install Prompt -->
+  <button class="install-prompt" id="installPrompt" style="display: none;">📱 Instalar App</button>
+
+  <footer class="footer">
+    <p class="credits">Feito com ❤ para Aldinete • <span id="year"></span></p>
+  </footer>
+
+  <!-- Sounds -->
+  <audio id="clickSound" preload="none">
+    <source src="./assets/sounds/click.mp3" type="audio/mpeg" />
+  </audio>
+
+  <!-- PIN Overlay -->
+  <div id="pinOverlay" class="pin-overlay" aria-hidden="false" role="dialog" aria-label="Protegido por PIN">
+    <div class="pin-card">
+      <h3 style="margin:0 0 .5rem;">Porta do Nosso Segredo</h3>
+      <p style="margin:.25rem 0 1rem; opacity:.9;">Um código do coração te espera. Digite o PIN para entrar.</p>
+      <form id="pinForm" class="pin-form">
+        <input id="pinInput" type="password" inputmode="numeric" maxlength="6" placeholder="PIN" autocomplete="one-time-code" required />
+        <button class="btn" type="submit">Desbloquear</button>
+      </form>
+      <div id="pinMsg" class="pin-msg" aria-live="polite"></div>
+    </div>
+    <div class="modal-backdrop" id="pinBackdrop"></div>
+  </div>
+
+  <!-- Scripts -->
+   <script src="./js/app.book.js?v=20250910-01"></script>
+
+  <!-- Back to Top Button -->
+  <button id="backToTop" aria-label="Voltar ao topo" class="hidden" style="position:fixed; right:16px; bottom:16px; z-index:120;">
+    ↑ Topo
+  </button>
+</body>
+</html>
